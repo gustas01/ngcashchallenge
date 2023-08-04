@@ -1,15 +1,23 @@
 package com.gustavo.ngcashchallenge.controllers;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-  @PostMapping
-  public String create(){
-    return "Usuário criado com sucesso";
+  @GetMapping
+  public String read(){
+    return "user read";
+  }
+
+  @PutMapping
+  public String update(){
+    return "Usuário atualizado com sucesso";
+  }
+
+  @DeleteMapping
+  public String delete(){
+    return "Usuário deletado com sucesso";
   }
 }

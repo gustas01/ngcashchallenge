@@ -3,12 +3,14 @@ package com.gustavo.ngcashchallenge.models;
 import com.gustavo.ngcashchallenge.ENUMs.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User {
 
   @Id
@@ -19,11 +21,11 @@ public class User {
   @Column(nullable = false)
   private String name;
 
-  @Length(min = 5, max = 50)
+  @Length(min = 3, max = 50)
   @Column(nullable = false, unique = true)
   private String username;
 
-  @Length(min = 5)
+  @Length(min = 8)
   @Column(nullable = false)
   private String password;
 

@@ -1,9 +1,11 @@
 package com.gustavo.ngcashchallenge.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "accounts")
+@Data
 public class Account {
 
   @Id
