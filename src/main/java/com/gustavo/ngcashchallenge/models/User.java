@@ -35,5 +35,5 @@ public class User {
 
   @NotNull
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  private Account accountId = new Account();
+  private Account account = new Account();
 }

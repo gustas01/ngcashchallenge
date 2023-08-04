@@ -30,15 +30,15 @@ public class AccountService {
     User userCashOut = userRepository.findByusername(cashOutUserName);
     User userCashIn = userRepository.findByusername(cashInUserName);
 
-    Optional<Account> accountUserCashOut = accountRepository.findById(userCashOut.getAccountId().getId());
+    Optional<Account> accountUserCashOut = accountRepository.findById(userCashOut.getAccount().getId());
     accountUserCashOut.get().setBalance(accountUserCashOut.get().getBalance() - value);
     userRepository.save(userCashOut);
 
-    Optional<Account> accountUserCashIn = accountRepository.findById(userCashIn.getAccountId().getId());
+    Optional<Account> accountUserCashIn = accountRepository.findById(userCashIn.getAccount().getId());
     accountUserCashIn.get().setBalance(accountUserCashIn.get().getBalance() + value);
     userRepository.save(userCashIn);
 
-    transactionService.create(userCashOut.getAccountId().getId(), userCashIn.getAccountId().getId(), value);
+    transactionService.create(userCashOut.getAccount().getId(), userCashIn.getAccount().getId(), value);
 
     return ResponseEntity.ok("Transação efetuada com sucesso");
   }
