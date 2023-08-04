@@ -1,12 +1,10 @@
 package com.gustavo.ngcashchallenge.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
+@Entity
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
