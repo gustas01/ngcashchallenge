@@ -8,7 +8,7 @@ public class UserController {
 
   @GetMapping
   public String read(){
-    return "user read";
+    return "Usuário lido com sucesso";
   }
 
   @PutMapping
@@ -21,3 +21,4 @@ public class UserController {
     return "Usuário deletado com sucesso";
   }
 }
+
