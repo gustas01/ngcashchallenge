@@ -1,10 +1,12 @@
 package com.gustavo.ngcashchallenge.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
 @Entity
+@Data
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,7 +19,7 @@ public class Transaction {
     private long creditedAccountId;
 
     @Column(nullable = false)
-    private long value;
+    private double value;
 
     @Column(nullable = false)
     private Date createdAt;
