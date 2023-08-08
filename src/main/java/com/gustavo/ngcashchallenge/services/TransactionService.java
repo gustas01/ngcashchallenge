@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(rollbackFor = { SQLException.class })
@@ -48,5 +50,14 @@ public class TransactionService {
     transactionRepository.save(transaction);
 
     return ResponseEntity.ok("Transação efetuada com sucesso");
+  }
+
+
+  public ResponseEntity<List<Transaction>> retrieveTransaction(long id){
+    //TODO: pegar accountId do user do token e tirar do parâmetro
+    List<Transaction> transactions= transactionRepository.findAllBydebitedAccountId(id);
+    List<Transaction> creditedTransactions= transactionRepository.findAllBycreditedAccountId(id);
+    transactions.addAll(creditedTransactions);
+    return ResponseEntity.ok(transactions);
   }
 }

@@ -7,6 +7,9 @@ import com.gustavo.ngcashchallenge.models.User;
 import com.gustavo.ngcashchallenge.repositories.AccountRepository;
 import com.gustavo.ngcashchallenge.repositories.UserRepository;
 import com.gustavo.ngcashchallenge.services.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +26,14 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(){
-    return ResponseEntity.ok("");
+  public ResponseEntity<String> login(HttpServletRequest request, HttpServletResponse response){
+    //TODO: gerar token chamando método de tokenService e setando ele no cookie
+    Cookie cookie = new Cookie("token", "umjwtaleatorio");
+    cookie.setPath("/");
+    cookie.setHttpOnly(true);
+    cookie.setSecure(true);
+    response.addCookie(cookie);
+    return ResponseEntity.ok("LOGIN");
   }
 
   @PostMapping("/register")
