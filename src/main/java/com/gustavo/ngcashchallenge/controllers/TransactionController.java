@@ -30,6 +30,7 @@ public class TransactionController {
 //    }
     //extrair nome do userdeCashOut do token e salvar nessa variável abaixo
 //    String cashOutUserName = "";
+    //tirar esse cashOutUserName vindo do DTO e pegar do token
 
     return transactionService.doTransaction(transactionData.cashOutUserName(), transactionData.cashInUserName(), transactionData.value());
   }

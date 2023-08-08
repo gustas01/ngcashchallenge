@@ -1,14 +1,25 @@
 package com.gustavo.ngcashchallenge.controllers;
 
+import com.gustavo.ngcashchallenge.DTOs.ReadUserDTO;
+import com.gustavo.ngcashchallenge.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-  @GetMapping
-  public String read(){
-    return "Usuário lido com sucesso";
+  private UserService userService;
+
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
+
+  @GetMapping("/{username}")
+  public ResponseEntity<ReadUserDTO> read(@PathVariable String username){
+    //tirar esse username dos params e pegar do token
+    System.out.println(username);
+    return userService.read(username);
   }
 
   @PutMapping

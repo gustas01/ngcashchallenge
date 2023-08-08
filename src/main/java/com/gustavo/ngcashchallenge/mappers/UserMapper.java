@@ -1,6 +1,7 @@
 package com.gustavo.ngcashchallenge.mappers;
 
 import com.gustavo.ngcashchallenge.DTOs.CreateUserDTO;
+import com.gustavo.ngcashchallenge.DTOs.ReadUserDTO;
 import com.gustavo.ngcashchallenge.models.Account;
 import com.gustavo.ngcashchallenge.models.User;
 import org.springframework.stereotype.Component;
@@ -23,5 +24,11 @@ public class UserMapper{
 //    String hashPassword = new BCryptPassEncoder().encode(userDTO.password());
 
     return user;
+  }
+
+  public ReadUserDTO UserToReadUserDTO(User user){
+    if (user == null) return null;
+    ReadUserDTO readUserDTO = new ReadUserDTO(user.getName(), user.getUsername(), user.getRole(), user.getAccount());
+    return readUserDTO;
   }
 }
