@@ -18,7 +18,6 @@ public class UserController {
   @GetMapping("/{username}")
   public ResponseEntity<ReadUserDTO> read(@PathVariable String username){
     //tirar esse username dos params e pegar do token
-    System.out.println(username);
     return userService.read(username);
   }
 

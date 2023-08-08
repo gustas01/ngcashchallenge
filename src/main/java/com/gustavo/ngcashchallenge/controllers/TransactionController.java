@@ -30,6 +30,7 @@ public class TransactionController {
 
   @PostMapping
   public ResponseEntity<String> create(@RequestBody DoTransactionDTO transactionData){
+    //TODO: pegar cashOutUserName do token, invés do body, e tirar o cashOutUserName do DoTransactionDTO
 //    var token = request.getCookies() != null ? tokenService.recoverToken(request, "token") : "";
 //    if(token != ""){
 //

@@ -54,7 +54,7 @@ public class TransactionService {
 
 
   public ResponseEntity<List<Transaction>> retrieveTransaction(long id){
-    //TODO: pegar accountId do user do token e tirar do parâmetro
+    // TODO: pegar accountId do user do token e tirar do parâmetro
     List<Transaction> transactions= transactionRepository.findAllBydebitedAccountId(id);
     List<Transaction> creditedTransactions= transactionRepository.findAllBycreditedAccountId(id);
     transactions.addAll(creditedTransactions);

@@ -14,14 +14,12 @@ public class UserMapper{
   }
 
   public User CreateUserDTOtoUser(CreateUserDTO userDTO){
-    //TODO: fazer o hash da senha antes de salvar (linha comentada), mas precisa instalar o security primeiro
     User user = new User();
     user.setName(userDTO.name());
     user.setUsername(userDTO.username());
     user.setPassword(userDTO.password());
     Account account = new Account();
     user.setAccount(account);
-//    String hashPassword = new BCryptPassEncoder().encode(userDTO.password());
 
     return user;
   }
