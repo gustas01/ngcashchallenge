@@ -6,6 +6,7 @@ import com.gustavo.ngcashchallenge.models.User;
 import com.gustavo.ngcashchallenge.repositories.AccountRepository;
 import com.gustavo.ngcashchallenge.repositories.TransactionRepository;
 import com.gustavo.ngcashchallenge.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,8 @@ public class TransactionService {
   public ResponseEntity<String> doTransaction(String cashOutUserName, String cashInUserName, double value){
     User userCashOut = userRepository.findByusername(cashOutUserName);
     User userCashIn = userRepository.findByusername(cashInUserName);
+
+    if(cashOutUserName.equals(cashInUserName)) return new ResponseEntity("Não é possível fazer transferência para si mesmo", HttpStatus.BAD_REQUEST);
 
     Optional<Account> accountUserCashOut = accountRepository.findById(userCashOut.getAccount().getId());
     accountUserCashOut.get().setBalance(accountUserCashOut.get().getBalance() - value);
