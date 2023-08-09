@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional(rollbackFor = { SQLException.class })
@@ -36,6 +38,14 @@ public class AuthService {
   }
 
   public ResponseEntity<String> register(CreateUserDTO userDTO){
+    String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%¨&*()_{}/^+=])(?=\\S+$).{8,200}$";
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(userDTO.password());
+
+    if(!matcher.matches()){
+      return new ResponseEntity<>("A senha deve conter 1 letra maiúscula, 1 minúscula, 1 número e 1 símbolo pelo menos", HttpStatus.BAD_REQUEST);
+    }
+
     User user = userMapper.CreateUserDTOtoUser(userDTO);
     Account account = new Account();
     account.setBalance(100);
