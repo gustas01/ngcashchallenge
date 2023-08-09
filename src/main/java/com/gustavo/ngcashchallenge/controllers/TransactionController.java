@@ -1,5 +1,6 @@
 package com.gustavo.ngcashchallenge.controllers;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.gustavo.ngcashchallenge.DTOs.DoTransactionDTO;
 import com.gustavo.ngcashchallenge.models.Transaction;
 import com.gustavo.ngcashchallenge.services.TokenService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/transactions")
@@ -16,29 +18,26 @@ public class TransactionController {
 
   private TransactionService transactionService;
   private TokenService tokenService;
+  private HttpServletRequest httpServletRequest;
 
-  public TransactionController(TransactionService transactionService, TokenService tokenService) {
+  public TransactionController(TransactionService transactionService, TokenService tokenService, HttpServletRequest httpServletRequest) {
     this.transactionService = transactionService;
     this.tokenService = tokenService;
+    this.httpServletRequest = httpServletRequest;
   }
 
-  @GetMapping("/{accountId}")
-  public ResponseEntity<List<Transaction>> readUsertransaction(@PathVariable long accountId){
-    //retornar transações em que o usuário logado participou. Pegar o accountId do token
+  @GetMapping
+  public ResponseEntity<List<Transaction>> readUsertransaction(){
+    Map<String, Claim> jwtData = tokenService.retrieveDataFromToken("token");
+    Long accountId = Long.parseLong(jwtData.get("accountId").asString());
     return transactionService.retrieveTransaction(accountId);
   }
 
   @PostMapping
   public ResponseEntity<String> create(@RequestBody DoTransactionDTO transactionData){
-    //TODO: pegar cashOutUserName do token, invés do body, e tirar o cashOutUserName do DoTransactionDTO
-//    var token = request.getCookies() != null ? tokenService.recoverToken(request, "token") : "";
-//    if(token != ""){
-//
-//    }
-    //extrair nome do userdeCashOut do token e salvar nessa variável abaixo
-//    String cashOutUserName = "";
-    //tirar esse cashOutUserName vindo do DTO e pegar do token
+    Map<String, Claim> jwtData = tokenService.retrieveDataFromToken("token");
+    String cashOutUserName = jwtData.get("username").asString();
 
-    return transactionService.doTransaction(transactionData.cashOutUserName(), transactionData.cashInUserName(), transactionData.value());
+    return transactionService.doTransaction(cashOutUserName, transactionData.cashInUserName(), transactionData.value());
   }
 }

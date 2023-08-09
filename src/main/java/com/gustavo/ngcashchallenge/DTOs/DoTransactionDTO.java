@@ -1,4 +1,4 @@
 package com.gustavo.ngcashchallenge.DTOs;
 
-public record DoTransactionDTO(String cashOutUserName, String cashInUserName, double value) {
+public record DoTransactionDTO(String cashInUserName, double value) {
 }
