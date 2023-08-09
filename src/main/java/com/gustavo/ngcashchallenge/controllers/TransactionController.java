@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +30,17 @@ public class TransactionController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Transaction>> readUsertransaction(){
+  public ResponseEntity<List<Transaction>> readUsertransaction(
+          @RequestParam(required = false, defaultValue = "false") String cashInFilter,
+          @RequestParam(required = false, defaultValue = "false") String cashOutFilter,
+          @RequestParam(required = false) String dateFilter
+  ){
     Map<String, Claim> jwtData = tokenService.retrieveDataFromToken("token");
     Long accountId = Long.parseLong(jwtData.get("accountId").asString());
-    return transactionService.retrieveTransaction(accountId);
+    return transactionService.retrieveTransaction(accountId, cashInFilter, cashOutFilter, dateFilter);
   }
+
+
 
   @PostMapping
   public ResponseEntity<String> create(@RequestBody DoTransactionDTO transactionData){

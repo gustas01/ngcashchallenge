@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -49,17 +51,32 @@ public class TransactionService {
     transaction.setDebitedAccountId(userCashOut.getAccount().getId());
     transaction.setCreditedAccountId(userCashIn.getAccount().getId());
     transaction.setValue(value);
-    transaction.setCreatedAt(new Date());
+    transaction.setCreatedAt(LocalDateTime.now());
     transactionRepository.save(transaction);
 
     return ResponseEntity.ok("Transação efetuada com sucesso");
   }
 
 
-  public ResponseEntity<List<Transaction>> retrieveTransaction(long id){
+  public ResponseEntity<List<Transaction>> retrieveTransaction(long id, String cashInFilter, String cashOutFilter, String dateFilter){
+//    System.out.println("imprimindo cashInFilter -> "+cashInFilter+"++++++++++++++++++++++++++");
+//    System.out.println("imprimindo cashOutFilter -> "+cashOutFilter+"++++++++++++++++++++++++++");
+//    System.out.println("imprimindo dateFilter -> "+dateFilter+"++++++++++++++++++++++++++");
+
     List<Transaction> transactions= transactionRepository.findAllBydebitedAccountId(id);
     List<Transaction> creditedTransactions= transactionRepository.findAllBycreditedAccountId(id);
     transactions.addAll(creditedTransactions);
+
+    if(Boolean.parseBoolean(cashInFilter))
+      transactions = transactions.stream().filter(transaction -> transaction.getCreditedAccountId() == id).toList();
+
+    if(Boolean.parseBoolean(cashOutFilter))
+      transactions = transactions.stream().filter(transaction -> transaction.getDebitedAccountId() == id).toList();
+
+    if(dateFilter != null)
+      transactions = transactions.stream().filter(transaction -> dateFilter.compareTo(transaction.getCreatedAt().toLocalDate().toString()) == 0).toList();
+
+
     return ResponseEntity.ok(transactions);
   }
 }
