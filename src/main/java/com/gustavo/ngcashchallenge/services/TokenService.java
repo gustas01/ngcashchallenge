@@ -42,7 +42,7 @@ public class TokenService {
     String token = JWT.create().withIssuer("ngcash-api")
             .withSubject(user.getUsername())
             .withPayload(tokenPayload)
-            .withExpiresAt(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")))
+            .withExpiresAt(LocalDateTime.now().plusHours(24).toInstant(ZoneOffset.of("-03:00")))
             .sign(Algorithm.HMAC256(secretKey));
 
     Cookie cookie = new Cookie("token", token);
