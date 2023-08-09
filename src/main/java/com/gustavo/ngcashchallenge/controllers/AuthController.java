@@ -27,24 +27,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
   private AuthService authService;
   private UserRepository userRepository;
-  private AuthenticationManager authenticationManager;
 
-  public AuthController(AuthService authService, UserRepository userRepository, AuthenticationManager authenticationManager) {
+
+  public AuthController(AuthService authService, UserRepository userRepository) {
     this.authService = authService;
     this.userRepository = userRepository;
-    this.authenticationManager = authenticationManager;
   }
 
   @PostMapping("/login")
   public ResponseEntity<String> login(@RequestBody LoginUserDTO loginUserDTO){
-    User user = userRepository.findByusername(loginUserDTO.username());
-    if(user == null) return new ResponseEntity("Usuário não encontrado", HttpStatus.BAD_REQUEST);
-
-    Authentication usernamePassword = new UsernamePasswordAuthenticationToken(loginUserDTO.username(), loginUserDTO.password());
-    var auth = this.authenticationManager.authenticate(usernamePassword);
-    authService.login(user);
-
-    return ResponseEntity.ok("LOGIN REALIZADO COM SUCESSO");
+    return authService.login(loginUserDTO);
   }
 
   @PostMapping("/register")
