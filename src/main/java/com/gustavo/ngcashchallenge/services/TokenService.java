@@ -3,6 +3,8 @@ package com.gustavo.ngcashchallenge.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.gustavo.ngcashchallenge.models.Account;
 import com.gustavo.ngcashchallenge.models.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,9 +23,11 @@ import java.util.Map;
 public class TokenService {
   @Value("${api.security.token.secret}")
   private String secretKey;
+  private HttpServletRequest request;
   private HttpServletResponse response;
 
-  public TokenService(HttpServletResponse response) {
+  public TokenService(HttpServletRequest request, HttpServletResponse response) {
+    this.request = request;
     this.response = response;
   }
 
@@ -33,7 +37,7 @@ public class TokenService {
     tokenPayload.put("name", user.getName());
     tokenPayload.put("username", user.getUsername());
     tokenPayload.put("role", user.getRole().toString());
-    tokenPayload.put("account", user.getAccount().toString());
+    tokenPayload.put("accountId", Long.toString(user.getAccount().getId()));
 
     String token = JWT.create().withIssuer("ngcash-api")
             .withSubject(user.getUsername())
@@ -66,5 +70,12 @@ public class TokenService {
     }catch (JWTVerificationException exception){
       return "";
     }
+  }
+
+  public  Map<String, Claim> retrieveDataFromToken(String cookieName){
+    String token = this.recoverToken(this.request, cookieName);
+
+    Map<String, Claim> jwtData = JWT.decode(token).getClaims();
+    return jwtData;
   }
 }
