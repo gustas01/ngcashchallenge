@@ -26,7 +26,10 @@ public class SecurityFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//    if(request.getRequestURI().equals("/auth/login") || request.getRequestURI().equals("/auth/register")) return;
+    if(request.getRequestURI().equals("/auth/login") || request.getRequestURI().equals("/auth/register")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
     String token = request.getCookies() != null ? tokenService.recoverToken(request, "token") : "";
     if(token != ""){
@@ -34,7 +37,6 @@ public class SecurityFilter extends OncePerRequestFilter {
       UserDetails user = userRepository.findByusername(subject);
 
       var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-      System.out.println(authentication);
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
     }
