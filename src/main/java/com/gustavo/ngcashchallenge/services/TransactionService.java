@@ -38,13 +38,13 @@ public class TransactionService {
     User userCashIn = userRepository.findByusername(cashInUserName);
 
     if(cashOutUserName.equals(cashInUserName)) return new ResponseEntity("Não é possível fazer transferência para si mesmo", HttpStatus.BAD_REQUEST);
+    if(userCashOut.getAccount().getBalance() < value) return new ResponseEntity("Saldo insuficiente", HttpStatus.BAD_REQUEST);
 
-    Optional<Account> accountUserCashOut = accountRepository.findById(userCashOut.getAccount().getId());
-    accountUserCashOut.get().setBalance(accountUserCashOut.get().getBalance() - value);
+
+    userCashOut.getAccount().setBalance(userCashOut.getAccount().getBalance() - value);
     userRepository.save(userCashOut);
 
-    Optional<Account> accountUserCashIn = accountRepository.findById(userCashIn.getAccount().getId());
-    accountUserCashIn.get().setBalance(accountUserCashIn.get().getBalance() + value);
+    userCashIn.getAccount().setBalance(userCashIn.getAccount().getBalance() + value);
     userRepository.save(userCashIn);
 
     Transaction transaction = new Transaction();
@@ -59,10 +59,6 @@ public class TransactionService {
 
 
   public ResponseEntity<List<Transaction>> retrieveTransaction(long id, String cashInFilter, String cashOutFilter, String dateFilter){
-//    System.out.println("imprimindo cashInFilter -> "+cashInFilter+"++++++++++++++++++++++++++");
-//    System.out.println("imprimindo cashOutFilter -> "+cashOutFilter+"++++++++++++++++++++++++++");
-//    System.out.println("imprimindo dateFilter -> "+dateFilter+"++++++++++++++++++++++++++");
-
     List<Transaction> transactions= transactionRepository.findAllBydebitedAccountId(id);
     List<Transaction> creditedTransactions= transactionRepository.findAllBycreditedAccountId(id);
     transactions.addAll(creditedTransactions);
